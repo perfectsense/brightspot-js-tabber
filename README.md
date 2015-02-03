@@ -13,9 +13,9 @@ Manually:
 
 Options:
 
-classActive : defaults to 'active'
-navSelector : defaults to '.bsp-tabber-nav'
-tabSelector : defaults to '.bsp-tab'
+-	classActive : defaults to 'active'
+-	navSelector : defaults to '.bsp-tabber-nav'
+-	tabSelector : defaults to '.bsp-tab'
 
 Example:
 
@@ -30,8 +30,8 @@ Example:
 
 When a tab is switched, the `showTab` event is fired, which passes an object containing:
 
-$currentTab - current tab dom element
-index - index of current tab (base 1, not base 0)
+-	$currentTab - current tab dom element
+-	index - index of current tab (base 1, not base 0)
 
 The tabber js object is exposed as a data attribute on the tabber DOM element, so tabs can switched externally like this:
 
