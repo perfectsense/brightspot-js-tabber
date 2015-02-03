@@ -28,7 +28,7 @@ Example:
 		<div class="bsp-tab">tab 3 content</div>
 	</div>
 
-When a tab is switched, the `showTab` event is fired, which passes an object containing:
+When a tab is switched, the `showTab` event is triggered on the tabber DOM element, which passes an object containing:
 
 -	$currentTab - current tab dom element
 -	index - index of current tab (base 1, not base 0)
