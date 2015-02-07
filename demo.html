@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<script src="bower_components/jquery/dist/jquery.js"></script>
+		<script src="bower_components/bsp-utils/bsp-utils.js"></script>
+		<script src="bsp-tabber.js"></script>
+		<script>if (!window.$) { alert("jquery not found, did you run 'bower install'?"); }</script>
+
+		<style type="text/css">
+		body {
+			font-family: sans-serif;
+		}
+
+		/** demo 1 style */
+		.demo1 {
+			margin: 10px;
+		}
+		.demo1 .bsp-tabber-nav-container a {
+			border: 1px #000 solid;
+			display: inline-block;
+			padding: 5px;
+		}
+		.demo1 .bsp-tabber-nav-container a.active {
+			background: yellow;
+		}
+		.demo1 .bsp-tab {
+			border: 1px #000 solid;
+			display: none;
+			padding: 5px;
+		}
+		.demo1 .bsp-tab.active {
+			display: block;
+		}
+		#demo1form1, #demo1form2 {
+			border: 1px #eee solid;
+			margin: 10px 40px;
+			padding: 5px;
+		}
+		#demo1form1 h4, #demo1form2 h4 {
+			margin: 10px 0;
+		}
+
+		/* demo 2 style */
+		.demo2 {
+			margin: 10px;
+		}
+		.demo2 .bsp-tabber-nav-container a {
+			border: 1px #000 solid;
+			display: inline-block;
+			padding: 5px;
+		}
+		.demo2 .bsp-tabber-nav-container a.active {
+			background: yellow;
+		}
+		.demo2 .bsp-tab {
+			border: 1px #000 solid;
+			display: none;
+			padding: 5px;
+		}
+		.demo2 .bsp-tab.active {
+			display: block;
+		}
+		.demo2tab1 {
+			color: green;
+			font-weight: bold;
+		}
+		.demo2tab2 {
+			color: brown;
+			font-weight: bold;	
+		}
+		.demo2tab3 {
+			color: orange;
+			font-weight: bold;
+		}
+
+		/* demo 3 styles */
+		.demo3 {
+			margin: 10px;
+		}
+		.demo3 .bsp-tabber-nav-container a {
+			border: 1px #000 solid;
+			display: inline-block;
+			padding: 5px;
+		}
+		.demo3 .bsp-tabber-nav-container a.active {
+			background: yellow;
+		}
+		.demo3 .bsp-tab {
+			border: 1px #000 solid;
+			display: none;
+			padding: 5px;
+		}
+		.demo3 .bsp-tab.active {
+			display: block;
+		}
+		</style>
+	</head>
+	<body>
+		<h1>Brightspot Tabber Demo</h1>
+
+		<section>
+			<h2>Demo 1</h2>
+
+			<p>Minimal tabber with no options</p>
+
+			<ul>
+				<li>Defaults to providing automatic navigation</li>
+				<li>Since no data-nav-title attribute is set on the tabs, the tab nav text defaults to numbers</li>
+				<li>Adds/removes navigation elements as tabs are added/removed</li>
+				<li>The first tab and tab nav will have the active class set since it wasn't manually specified on an element</li>
+			</ul>
+
+			<div class="demo1" data-bsp-tabber>
+				<div class="bsp-tab">Tab 1 content</div>
+				<div class="bsp-tab">Tab 2 content</div>
+				<div class="bsp-tab">Tab 3 content</div>
+			</div>
+
+			<form id="demo1form1">
+				<h4>Add another tab</h4>
+				<label>Title <input type="text" name="title" /></label>
+				<label>Content <input type="text" name="content" /></label>
+				<label>
+					Insert after (0 = prepend all)
+					<select name="insertAfter">
+						<option></option>
+						<option>0</option>
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+					</select>
+				</label>
+				<input type="submit" value="Add" />
+			</form>
+
+			<form id="demo1form2">
+				<h4>Remove a tab</h4>
+				<label>
+					<select name="tabToRemove">
+						<option></option>
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+					</select>
+				</label>
+				<input type="submit" value="Remove" />
+			</form>
+
+			<script>
+				function demo1select(name, showZero) {
+					var html = '<select name="'+name+'"><option></option>';
+					if (showZero) {
+						html += '<option>0</option>';
+					}
+					$('.demo1 .bsp-tab').each(function(key) {
+						html += '<option>' + (key+1) + '</option>';
+					});
+					html += '</select>';
+					return html;
+				};
+				$('#demo1form1').submit(function(e) {
+					var tabber = $('.demo1').data('tabber');
+					var $form = $(this);
+					var insertAfter = $form.find('[name=insertAfter]').val();
+					if (insertAfter !== "") {
+						insertAfter = insertAfter*1;
+					}
+					tabber.addTab({
+						content: $form.find('[name=content]').val(),
+						insertAfter: insertAfter,
+						title: $form.find('[name=title]').val()
+					});
+					$form.find('[name=insertAfter]').replaceWith( demo1select('insertAfter', true ) );
+					e.preventDefault();
+				});
+				$('#demo1form2').submit(function(e) {
+					var tabber = $('.demo1').data('tabber');
+					var $form = $(this);
+					tabber.removeTab( $form.find('[name=tabToRemove]').val() );
+					$form.find('[name=tabToRemove]').replaceWith( demo1select('tabToRemove') );
+					e.preventDefault();
+				});
+			</script>
+		</section>
+
+		<section>
+			<h2>Demo 2</h2>
+
+			<p>Overriding defaults</p>
+
+			<ul>
+				<li>Custom titles and classes added to nav tabs</li>
+				<li>Second tab shown by default</li>
+				<li>Tab navigation inserted on bottom</li>
+			</ul>
+
+			<div class="demo2" data-bsp-tabber data-bsp-tabber-options='{"navPosition" : "bottom"}'>
+				<div class="bsp-tab" data-nav-title="Tab 1" data-nav-class="demo2tab1">Tab 1 content</div>
+				<div class="bsp-tab active" data-nav-title="Tab 2" data-nav-class="demo2tab2">Tab 2 content</div>
+				<div class="bsp-tab" data-nav-title="Tab 3" data-nav-class="demo2tab3">Tab 3 content</div>
+			</div>
+		</section>
+		
+		<section>
+			<h2>Demo 3</h2>
+
+			<p>Custom tab navigation</p>
+
+			<div class="demo3nav">
+				<button data-show-tab="1">Tab 1</button>
+				<button data-show-tab="2">Tab 2</button>
+				<button data-show-tab="3">Tab 3</button>
+			</div>
+
+			<div class="demo3" data-bsp-tabber data-bsp-tabber-options='{"showNav" : false}'>
+				<div class="bsp-tab">Tab 1 content</div>
+				<div class="bsp-tab">Tab 2 content</div>
+				<div class="bsp-tab">Tab 3 content</div>
+			</div>
+
+			<script>
+				$('.demo3nav button').on('click', function() {
+					var tabber = $('.demo3').data('tabber');
+					var index = $(this).data('show-tab');
+					tabber.showTab(index);
+				});
+			</script>
+		</section>
+
+	</body>
+</html>

@@ -16,8 +16,8 @@
  *
  * Module options:
  * classActive - defaults to 'active'
- * navSelector - defaults to '.bsp-tabber-nav'
- * tabSelector - defaults to '.bsp-tab'
+ * navClass - defaults to 'bsp-tabber-nav'
+ * tabClass - defaults to 'bsp-tab'
  * 
  * Events:
  * showTab - fires when a tab is shown, passes an object with
@@ -30,65 +30,43 @@
  * var $tabber = $('.my-tabber').data('tabber');
  * $tabber.showTab(2);
  */
-define(function(require){
+(function(globals, factory) {
+
     "use strict";
-    var $           = require('jquery');
-    var bsp_utils   = require('bsp-utils');
+
+    if (typeof define === 'function' && define.amd) {
+        define(['jquery','bsp-utils'], factory);
+
+    } else {
+        factory(globals.jQuery, globals.bsp_utils, globals);
+    }
+
+})(this, function($, bsp_utils, globals) {
+    "use strict";
 
     var module = {
         currentTab: 1,
+        showNav: true,
         init: function($el, options) {
             var self = this;
-            var defaultTabSet = false;
-            var defaultNavBtnSet = false;
-
-            this.$el = $el;
-            this.options = options;
-            
-            /** allow default nav to be set in html */
-            $el.find(options.navSelector).each(function(key, el) {
-                if ( $(el).hasClass(options.classActive) ) {
-                    defaultNavBtnSet = true;
-                }
-            });
-
-            /** default to first nav button if none set */
-            if (!defaultNavBtnSet) {
-                $el.find(options.navSelector).first().addClass(options.classActive);
-            }
-
-            $el.find(options.tabSelector).each(function(key, el) {
-                /** save tab index */
-                $(el).attr('data-tab-index', key+1);
-
-                /** allow default open tab to be set in html */
-                if ( $(el).hasClass(options.classActive) ) {
+            self.$el = $el;
+            self.options = options;
+            $el.data('tabber', self);
+            self.setDefaultTab();
+            self.render();
+        },
+        setDefaultTab: function() {
+            var self = this;
+            this.$el.find('.' + this.options.tabClass).each(function(key, tab) {
+                if ($(tab).hasClass(self.options.classActive)) {
                     self.currentTab = key+1;
-                    defaultTabSet = true;
                 }
             });
-
-            /** default to first tab if none set */
-            if (!defaultTabSet) {
-                $el.find(options.tabSelector).first().addClass(options.classActive);
-            }
-
-            /** click handlers for built-in nav */
-            $el.find(options.navSelector).on('click', function(e) {
-                var index = $(this).data('show-tab');
-                self.showTab(index);
-                $(options.navSelector).removeClass(options.classActive);
-                $(this).addClass(options.classActive);
-                e.preventDefault();
-            });
-
-            /** expose tabber js through data attribute */
-            $el.data('tabber', this);
         },
         showTab: function(index) {
             var self = this;
             var $currentTab;
-            this.$el.find(this.options.tabSelector).each(function(key, tab) {
+            this.$el.find('.' + this.options.tabClass).each(function(key, tab) {
                 var $tab = $(tab);
                 if ( $tab.data('tab-index') === index ) {
                     $tab.addClass(self.options.classActive);
@@ -98,18 +76,111 @@ define(function(require){
                 }
             });
             this.currentTab = index;
+            this.render();
             this.$el.trigger('showTab', {
                 $currentTab: $currentTab,
                 index: index
             });
+        },
+        addTab: function(options) {
+            var self = this;
+            var newTab = $('<div></div>', {
+                class: self.options.tabClass,
+                'data-nav-title': options.title,
+                'data-nav-class': options.navClass
+            });
+            newTab.append(options.content);
+            if (options.insertAfter > 0) {
+                self.$el.find('.' + self.options.tabClass).each(function(key, tab) {
+                    if ((key+1) == options.insertAfter) {
+                        $(tab).after(newTab);
+                    }
+                });
+                if (options.insertAfter <= self.currentTab) {
+                    self.currentTab++;
+                }
+            } else if (options.insertAfter === 0) {
+                self.$el.prepend(newTab);
+                self.currentTab++;
+            } else {
+                self.$el.append(newTab);
+            }
+            this.$el.trigger('addTab');
+            self.render();
+        },
+        removeTab: function(i) {
+            var $tab = this.$el.find('[data-tab-index='+i+']');
+            if ($tab.hasClass(this.options.classActive)) {
+                this.currentTab = 1;
+            }
+            $tab.remove();
+            this.$el.trigger('removeTab');
+            this.render();
+        },
+        indexTabs: function() {
+            var self = this;
+            this.$el.find('.' + this.options.tabClass).each(function(key, el) {
+                $(el).attr('data-tab-index', key+1);
+            });
+        },
+        render: function() {
+            this.indexTabs();
+            this.renderNav();
+            this.renderTabs();
+        },
+        renderNav: function() {
+            if (this.options.showNav) {
+                var self = this;
+                var selector = '.' + self.options.navContainerClass;
+                var navHtml = '<div class="'+self.options.navContainerClass+'">';
+            
+                self.$el.find(selector).remove();
+
+                self.$el.find('.' + self.options.tabClass).each(function(key, val) {
+                    var linkText = key+1;
+                    var navExtraClass = $(val).data('nav-class');
+                    if ($(val).data('nav-title')) {
+                        linkText = $(val).data('nav-title');
+                    }
+                    navHtml += '<a class="'+self.options.navClass;
+                    if (navExtraClass) {
+                        navHtml += ' ' + navExtraClass;
+                    }
+                    navHtml += '" href="" data-show-tab="'+(key+1)+'">'+linkText+'</a>';
+                });
+
+                navHtml += '</div>';
+
+                if (self.options.navPosition == 'bottom') {
+                    self.$el.append(navHtml);
+                } else {
+                    self.$el.prepend(navHtml);
+                }
+
+                this.$el.find('.' + this.options.navClass).removeClass( this.options.classActive );
+                this.$el.find('[data-show-tab='+this.currentTab+']').addClass( this.options.classActive );
+
+                self.$el.find('.' + self.options.navClass).on('click', function(e) {
+                    var index = $(this).data('show-tab');
+                    self.showTab(index);
+                    e.preventDefault();
+                });
+            }
+        },
+        renderTabs: function() {
+            this.$el.find('.' + this.options.tabClass).removeClass( this.options.classActive );
+            this.$el.find('[data-tab-index='+this.currentTab+']').addClass( this.options.classActive );
         }
     };
     
     var thePlugin = {
         '_defaultOptions': {
-            'classActive': 'active',
-            'navSelector':  '.bsp-tabber-nav',
-            'tabSelector':  '.bsp-tab'
+            'classActive':        'active',
+            'navClass':           'bsp-tabber-nav',
+            'navContainerClass':  'bsp-tabber-nav-container',
+            'navPosition':        'top',
+            'showNav':            true,
+            'tabClass':           'bsp-tab'
         },
         '_each': function(item) {
             var options = this.option(item);
