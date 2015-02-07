@@ -94,6 +94,69 @@
 		.demo3 .bsp-tab.active {
 			display: block;
 		}
+
+		/* demo 4 styles */
+		.demo4 {
+			margin: 10px;
+		}
+		.demo4 .bsp-tabber-nav-container a {
+			border: 1px #000 solid;
+			display: inline-block;
+			padding: 5px;
+		}
+		.demo4 .bsp-tabber-nav-container a.active {
+			background: yellow;
+		}
+		.demo4 .bsp-tab {
+			border: 1px #000 solid;
+			display: none;
+			padding: 5px;
+		}
+		.demo4 .bsp-tab.active {
+			display: block;
+		}
+		#demo4form {
+			border: 1px #eee solid;
+			margin: 10px 40px;
+			padding: 5px;
+		}
+		.demo4 .error {
+			border: 1px red solid;
+			color: red;
+			margin-bottom: 10px;
+			padding: 10px;
+		}
+
+		/* demo 5 styles */
+		.demo5 {
+			margin: 10px 10px 100px 10px;
+			height: 50px;
+			position: relative;
+		}
+		.demo5 .bsp-tabber-nav-container a {
+			border: 1px #000 solid;
+			display: inline-block;
+			padding: 5px;
+		}
+		.demo5 .bsp-tabber-nav-container a.active {
+			background: yellow;
+		}
+		.demo5 .bsp-tab {
+			border: 1px #000 solid;
+			left: 0;
+			opacity: 0;
+			padding: 5px;
+			position: absolute;
+			width: 95%;
+			top: 30px;
+		}
+		.demo5 .bsp-tab.active {
+			opacity: 1;
+		    transition: opacity 1s ease-out;
+		    -ms-transition: opacity 1s ease-out;
+		    -moz-transition: opacity 1s ease-out;
+		    -webkit-transition: opacity 1s ease-out;
+		}
 		</style>
 	</head>
 	<body>
@@ -106,8 +169,8 @@
 
 			<ul>
 				<li>Defaults to providing automatic navigation</li>
-				<li>Since no data-nav-title attribute is set on the tabs, the tab nav text defaults to numbers</li>
-				<li>Adds/removes navigation elements as tabs are added/removed</li>
+				<li>Since no data-nav-title attribute is set on the tabs, the tab nav text defaults to numbers (you likely would always want to specify titles for tab nav)</li>
+				<li>Adds/removes navigation elements as tabs are added/removed (note that you cannot reliably select nav elements by index numbers, you should specify a custom class if you need to target specific nav elements)</li>
 				<li>The first tab and tab nav will have the active class set since it wasn't manually specified on an element</li>
 			</ul>
 
@@ -121,8 +184,9 @@
 				<h4>Add another tab</h4>
 				<label>Title <input type="text" name="title" /></label>
 				<label>Content <input type="text" name="content" /></label>
+				<div>
 				<label>
-					Insert after (0 = prepend all)
+					Insert after (0 = beginning, undefined = end)
 					<select name="insertAfter">
 						<option></option>
 						<option>0</option>
@@ -131,6 +195,7 @@
 						<option>3</option>
 					</select>
 				</label>
+				</div>
 				<input type="submit" value="Add" />
 			</form>
 
@@ -232,6 +297,48 @@
 					tabber.prevTab();
 				});
 			</script>
+		</section>
+
+		<section>
+			<h2>Demo 4</h2>
+
+			<p>Override showTab method to allow conditional navigation</p>
+
+			<div class="demo4" data-bsp-tabber data-bsp-tabber-options='{"showTabOverride": true}'>
+				<div class="bsp-tab">Tab 1 content</div>
+				<div class="bsp-tab">Tab 2 content</div>
+				<div class="bsp-tab">Tab 3 content</div>
+			</div>
+
+			<form id="demo4form" action="">
+				<h4>Allow tab navigation</h4>
+				<label><input type="radio" name="allownav" value="yes" checked /> Yes</label>
+				<label><input type="radio" name="allownav" value="no" /> No</label>
+			</form>
+
+			<script>
+				$('.demo4').on('showTab', function(e, data) {
+					$('.demo4').find('.error').remove();
+					var allowNav = $('#demo4form [name=allownav]:checked').val();
+					if (allowNav == "yes") {
+						data.tabber.doShowTab(data.index);
+					} else {
+						data.$currentTab.prepend('<div class="error">tab nav disabled</div>');
+					}
+				});
+			</script>
+		</section>
+
+		<section>
+			<h2>Demo 5</h2>
+
+			<p>Animate tab transition with CSS</p>
+
+			<div class="demo5" data-bsp-tabber>
+				<div class="bsp-tab" data-nav-title="Tab 1">Tab 1 content</div>
+				<div class="bsp-tab" data-nav-title="Tab 2">Tab 2 content</div>
+				<div class="bsp-tab" data-nav-title="Tab 3">Tab 3 content</div>
+			</div>
 		</section>
 
 	</body>

@@ -66,22 +66,21 @@
         },
         showTab: function(index) {
             var self = this;
-            var $currentTab;
-            this.$el.find('.' + this.options.tabClass).each(function(key, tab) {
-                var $tab = $(tab);
-                if ( $tab.data('tab-index') === index ) {
-                    $tab.addClass(self.options.classActive);
-                    $currentTab = $tab;
-                } else {
-                    $tab.removeClass(self.options.classActive);
-                }
-            });
-            this.currentTab = index;
-            this.render();
+            var $currentTab = this.$el.find('.' + this.options.tabClass + '[data-tab-index='+this.currentTab+']');
+            var $nextTab = this.$el.find('.' + this.options.tabClass + '[data-tab-index='+index+']');
+            if (!this.options.showTabOverride) {
+                this.doShowTab(index);
+            }
             this.$el.trigger('showTab', {
                 $currentTab: $currentTab,
-                index: index
+                $nextTab: $nextTab,
+                index: index,
+                tabber: self
             });
+        },
+        doShowTab: function(index) {
+            this.currentTab = index;
+            this.render();
         },
         nextTab: function() {
             if (this.currentTab < this.tabCount) {
@@ -198,6 +197,7 @@
             'navContainerClass':  'bsp-tabber-nav-container',
             'navPosition':        'top',
             'showNav':            true,
+            'showTabOverride':    false,
             'tabClass':           'bsp-tab'
         },
         '_each': function(item) {
