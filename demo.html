@@ -207,23 +207,29 @@
 
 			<p>Custom tab navigation</p>
 
+			<ul>
+				<li>Loop enabed for custom previous/next buttons</li>
+			</ul>
+
 			<div class="demo3nav">
-				<button data-show-tab="1">Tab 1</button>
-				<button data-show-tab="2">Tab 2</button>
-				<button data-show-tab="3">Tab 3</button>
+				<button class="prev">Previous</button>
+				<button class="next">Next</button>
 			</div>
 
-			<div class="demo3" data-bsp-tabber data-bsp-tabber-options='{"showNav" : false}'>
+			<div class="demo3" data-bsp-tabber data-bsp-tabber-options='{"showNav": false, "loop": true }'>
 				<div class="bsp-tab">Tab 1 content</div>
 				<div class="bsp-tab">Tab 2 content</div>
 				<div class="bsp-tab">Tab 3 content</div>
 			</div>
 
 			<script>
-				$('.demo3nav button').on('click', function() {
+				$('.demo3nav .next').on('click', function() {
 					var tabber = $('.demo3').data('tabber');
-					var index = $(this).data('show-tab');
-					tabber.showTab(index);
+					tabber.nextTab();
+				});
+				$('.demo3nav .prev').on('click', function() {
+					var tabber = $('.demo3').data('tabber');
+					tabber.prevTab();
 				});
 			</script>
 		</section>

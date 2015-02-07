@@ -47,6 +47,7 @@
     var module = {
         currentTab: 1,
         showNav: true,
+        tabCount: 0,
         init: function($el, options) {
             var self = this;
             self.$el = $el;
@@ -81,6 +82,20 @@
                 $currentTab: $currentTab,
                 index: index
             });
+        },
+        nextTab: function() {
+            if (this.currentTab < this.tabCount) {
+                this.showTab(this.currentTab+1);
+            } else if (this.currentTab == this.tabCount && this.options.loop) {
+                this.showTab(1);
+            }
+        },
+        prevTab: function() {
+            if (this.currentTab > 1) {
+                this.showTab(this.currentTab-1);
+            } else if (this.currentTab == 1 && this.options.loop) {
+                this.showTab(this.tabCount);
+            }
         },
         addTab: function(options) {
             var self = this;
@@ -119,8 +134,10 @@
         },
         indexTabs: function() {
             var self = this;
+            self.tabCount = 0;
             this.$el.find('.' + this.options.tabClass).each(function(key, el) {
                 $(el).attr('data-tab-index', key+1);
+                self.tabCount++;
             });
         },
         render: function() {
@@ -176,6 +193,7 @@
     var thePlugin = {
         '_defaultOptions': {
             'classActive':        'active',
+            'loop':               false,
             'navClass':           'bsp-tabber-nav',
             'navContainerClass':  'bsp-tabber-nav-container',
             'navPosition':        'top',
