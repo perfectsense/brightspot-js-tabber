@@ -55,6 +55,9 @@
             $el.data('tabber', self);
             self.setDefaultTab();
             self.render();
+            self.$el.trigger('init', {
+                tabber: self
+            });
         },
         setDefaultTab: function() {
             var self = this;
@@ -119,8 +122,11 @@
             } else {
                 self.$el.append(newTab);
             }
-            this.$el.trigger('addTab');
             self.render();
+            this.$el.trigger('addTab', {
+                tabber: self,
+                $newTab: newTab
+            });
         },
         removeTab: function(i) {
             var $tab = this.$el.find('[data-tab-index='+i+']');
@@ -128,8 +134,10 @@
                 this.currentTab = 1;
             }
             $tab.remove();
-            this.$el.trigger('removeTab');
             this.render();
+            this.$el.trigger('removeTab', {
+                tabber: self
+            });
         },
         indexTabs: function() {
             var self = this;

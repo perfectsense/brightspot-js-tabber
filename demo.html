@@ -129,9 +129,7 @@
 
 		/* demo 5 styles */
 		.demo5 {
-			margin: 10px 10px 100px 10px;
-			height: 50px;
-			position: relative;
+			margin: 10px;
 		}
 		.demo5 .bsp-tabber-nav-container a {
 			border: 1px #000 solid;
@@ -143,6 +141,29 @@
 		}
 		.demo5 .bsp-tab {
 			border: 1px #000 solid;
+			display: none;
+			padding: 5px;
+		}
+		.demo5 .bsp-tab.active {
+			display: block;
+		}
+
+		/* demo 6 styles */
+		.demo6 {
+			margin: 10px 10px 100px 10px;
+			height: 50px;
+			position: relative;
+		}
+		.demo6 .bsp-tabber-nav-container a {
+			border: 1px #000 solid;
+			display: inline-block;
+			padding: 5px;
+		}
+		.demo6 .bsp-tabber-nav-container a.active {
+			background: yellow;
+		}
+		.demo6 .bsp-tab {
+			border: 1px #000 solid;
 			left: 0;
 			opacity: 0;
 			padding: 5px;
@@ -150,7 +171,7 @@
 			width: 95%;
 			top: 30px;
 		}
-		.demo5 .bsp-tab.active {
+		.demo6 .bsp-tab.active {
 			opacity: 1;
 		    transition: opacity 1s ease-out;
 		    -ms-transition: opacity 1s ease-out;
@@ -332,9 +353,39 @@
 		<section>
 			<h2>Demo 5</h2>
 
-			<p>Animate tab transition with CSS</p>
+			<p>Fill tab content from AJAX requests</p>
 
 			<div class="demo5" data-bsp-tabber>
+				<div class="bsp-tab" data-nav-title="Tab 1"></div>
+				<div class="bsp-tab" data-nav-title="Tab 2"></div>
+				<div class="bsp-tab" data-nav-title="Tab 3"></div>
+			</div>
+
+			<script>
+				$(function() {
+					$('.demo5').on('showTab', function(e, data) {
+						/** immediatly display loading message */
+						data.$nextTab.html('Loading...');
+
+						/** mocking async ajax request with a timeout */
+						setTimeout(function() {
+							data.$nextTab.html('Content from ajax request loaded');
+						}, 1000);
+					});
+
+					$('.demo5').on('init', function(e, data) {
+						data.tabber.showTab(1);
+					});
+				})();
+			</script>
+		</section>
+
+		<section>
+			<h2>Demo 6</h2>
+
+			<p>Animate tab transition with CSS</p>
+
+			<div class="demo6" data-bsp-tabber>
 				<div class="bsp-tab" data-nav-title="Tab 1">Tab 1 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 2">Tab 2 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 3">Tab 3 content</div>
