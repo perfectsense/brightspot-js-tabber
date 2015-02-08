@@ -129,10 +129,15 @@
             });
         },
         removeTab: function(i) {
+            console.log('i = ', i);
+            console.log('current tab = ', this.currentTab);
             var $tab = this.$el.find('[data-tab-index='+i+']');
             if ($tab.hasClass(this.options.classActive)) {
                 this.currentTab = 1;
+            } else if (i < this.currentTab) {
+                this.currentTab--;
             }
+            console.log('current tab = ', this.currentTab);
             $tab.remove();
             this.render();
             this.$el.trigger('removeTab', {

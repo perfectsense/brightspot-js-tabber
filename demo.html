@@ -244,7 +244,11 @@
 					});
 					html += '</select>';
 					return html;
-				};
+				}
+				function demo1replaceDropdowns() {
+					$('#demo1form1').find('[name=insertAfter]').replaceWith( demo1select('insertAfter', true ) );
+					$('#demo1form2').find('[name=tabToRemove]').replaceWith( demo1select('tabToRemove') );
+				}
 				$('#demo1form1').submit(function(e) {
 					var tabber = $('.demo1').data('tabber');
 					var $form = $(this);
@@ -257,14 +261,14 @@
 						insertAfter: insertAfter,
 						title: $form.find('[name=title]').val()
 					});
-					$form.find('[name=insertAfter]').replaceWith( demo1select('insertAfter', true ) );
+					demo1replaceDropdowns();
 					e.preventDefault();
 				});
 				$('#demo1form2').submit(function(e) {
 					var tabber = $('.demo1').data('tabber');
 					var $form = $(this);
 					tabber.removeTab( $form.find('[name=tabToRemove]').val() );
-					$form.find('[name=tabToRemove]').replaceWith( demo1select('tabToRemove') );
+					demo1replaceDropdowns();
 					e.preventDefault();
 				});
 			</script>
@@ -376,7 +380,7 @@
 					$('.demo5').on('init', function(e, data) {
 						data.tabber.showTab(1);
 					});
-				})();
+				});
 			</script>
 		</section>
 
