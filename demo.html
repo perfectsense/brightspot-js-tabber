@@ -6,6 +6,7 @@
 		<script src="bower_components/bsp-utils/bsp-utils.js"></script>
 		<script src="bsp-tabber.js"></script>
 		<script>if (!window.$) { alert("jquery not found, did you run 'bower install'?"); }</script>
+		<link rel="stylesheet" type="text/css" href="bsp-tabber.css" />
 
 		<style type="text/css">
 		body {
@@ -13,26 +14,24 @@
 			padding-bottom: 50px;
 		}
 
-		/** demo 1 style */
-		.demo1 {
+		/** demo shared styles */
+		.demo {
 			margin: 10px;
 		}
-		.demo1 .bsp-tabber-nav-container a {
+		.demo .bsp-tabber-nav-container a {
 			border: 1px #000 solid;
 			display: inline-block;
 			padding: 5px;
 		}
-		.demo1 .bsp-tabber-nav-container a.active {
-			background: yellow;
-		}
-		.demo1 .bsp-tab {
+		.demo .bsp-tab {
 			border: 1px #000 solid;
-			display: none;
 			padding: 5px;
 		}
-		.demo1 .bsp-tab.active {
-			display: block;
+		.demo .bsp-tabber-nav-container a.active {
+			background: yellow;
 		}
+
+		/** demo 1 styles */
 		#demo1form1, #demo1form2 {
 			border: 1px #eee solid;
 			margin: 10px 40px;
@@ -41,27 +40,8 @@
 		#demo1form1 h4, #demo1form2 h4 {
 			margin: 10px 0;
 		}
-
-		/* demo 2 style */
-		.demo2 {
-			margin: 10px;
-		}
-		.demo2 .bsp-tabber-nav-container a {
-			border: 1px #000 solid;
-			display: inline-block;
-			padding: 5px;
-		}
-		.demo2 .bsp-tabber-nav-container a.active {
-			background: yellow;
-		}
-		.demo2 .bsp-tab {
-			border: 1px #000 solid;
-			display: none;
-			padding: 5px;
-		}
-		.demo2 .bsp-tab.active {
-			display: block;
-		}
+		
+		/** demo 2 styles */
 		.demo2tab1 {
 			color: green;
 			font-weight: bold;
@@ -75,47 +55,7 @@
 			font-weight: bold;
 		}
 
-		/* demo 3 styles */
-		.demo3 {
-			margin: 10px;
-		}
-		.demo3 .bsp-tabber-nav-container a {
-			border: 1px #000 solid;
-			display: inline-block;
-			padding: 5px;
-		}
-		.demo3 .bsp-tabber-nav-container a.active {
-			background: yellow;
-		}
-		.demo3 .bsp-tab {
-			border: 1px #000 solid;
-			display: none;
-			padding: 5px;
-		}
-		.demo3 .bsp-tab.active {
-			display: block;
-		}
-
-		/* demo 4 styles */
-		.demo4 {
-			margin: 10px;
-		}
-		.demo4 .bsp-tabber-nav-container a {
-			border: 1px #000 solid;
-			display: inline-block;
-			padding: 5px;
-		}
-		.demo4 .bsp-tabber-nav-container a.active {
-			background: yellow;
-		}
-		.demo4 .bsp-tab {
-			border: 1px #000 solid;
-			display: none;
-			padding: 5px;
-		}
-		.demo4 .bsp-tab.active {
-			display: block;
-		}
+		/** demo 4 styles */
 		#demo4form {
 			border: 1px #eee solid;
 			margin: 10px 40px;
@@ -128,43 +68,14 @@
 			padding: 10px;
 		}
 
-		/* demo 5 styles */
-		.demo5 {
-			margin: 10px;
-		}
-		.demo5 .bsp-tabber-nav-container a {
-			border: 1px #000 solid;
-			display: inline-block;
-			padding: 5px;
-		}
-		.demo5 .bsp-tabber-nav-container a.active {
-			background: yellow;
-		}
-		.demo5 .bsp-tab {
-			border: 1px #000 solid;
-			display: none;
-			padding: 5px;
-		}
-		.demo5 .bsp-tab.active {
-			display: block;
-		}
-
-		/* demo 6 styles */
+		/** demo 6 styles */
 		.demo6 {
-			margin: 10px;
 			height: 50px;
 			position: relative;
 		}
-		.demo6 .bsp-tabber-nav-container a {
-			border: 1px #000 solid;
-			display: inline-block;
-			padding: 5px;
-		}
-		.demo6 .bsp-tabber-nav-container a.active {
-			background: yellow;
-		}
 		.demo6 .bsp-tab {
 			border: 1px #000 solid;
+			display: block;
 			left: 0;
 			opacity: 0;
 			padding: 5px;
@@ -178,27 +89,6 @@
 		    -ms-transition: opacity 1s ease-out;
 		    -moz-transition: opacity 1s ease-out;
 		    -webkit-transition: opacity 1s ease-out;
-		}
-
-		/* demo 7 styles */
-		.demo7 {
-			margin: 10px;
-		}
-		.demo7 .bsp-tabber-nav-container a {
-			border: 1px #000 solid;
-			display: inline-block;
-			padding: 5px;
-		}
-		.demo7 .bsp-tabber-nav-container a.active {
-			background: yellow;
-		}
-		.demo7 .bsp-tab {
-			border: 1px #000 solid;
-			display: none;
-			padding: 5px;
-		}
-		.demo7 .bsp-tab.active {
-			display: block;
 		}
 		</style>
 	</head>
@@ -217,7 +107,7 @@
 				<li>The first tab and tab nav will have the active class set since it wasn't manually specified on an element</li>
 			</ul>
 
-			<div class="demo1" data-bsp-tabber>
+			<div class="demo demo1" data-bsp-tabber>
 				<div class="bsp-tab">Tab 1 content</div>
 				<div class="bsp-tab">Tab 2 content</div>
 				<div class="bsp-tab">Tab 3 content</div>
@@ -307,7 +197,7 @@
 				<li>Tab navigation inserted on bottom</li>
 			</ul>
 
-			<div class="demo2" data-bsp-tabber data-bsp-tabber-options='{"navPosition" : "bottom"}'>
+			<div class="demo demo2" data-bsp-tabber data-bsp-tabber-options='{"navPosition" : "bottom"}'>
 				<div class="bsp-tab" data-nav-title="Tab 1" data-nav-class="demo2tab1">Tab 1 content</div>
 				<div class="bsp-tab active" data-nav-title="Tab 2" data-nav-class="demo2tab2">Tab 2 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 3" data-nav-class="demo2tab3">Tab 3 content</div>
@@ -328,7 +218,7 @@
 				<button class="next">Next</button>
 			</div>
 
-			<div class="demo3" data-bsp-tabber data-bsp-tabber-options='{"showNav": false, "loop": true }'>
+			<div class="demo demo3" data-bsp-tabber data-bsp-tabber-options='{"showNav": false, "loop": true }'>
 				<div class="bsp-tab">Tab 1 content</div>
 				<div class="bsp-tab">Tab 2 content</div>
 				<div class="bsp-tab">Tab 3 content</div>
@@ -351,7 +241,7 @@
 
 			<p>Override showTab method to allow conditional navigation</p>
 
-			<div class="demo4" data-bsp-tabber data-bsp-tabber-options='{"showTabOverride": true}'>
+			<div class="demo demo4" data-bsp-tabber data-bsp-tabber-options='{"showTabOverride": true}'>
 				<div class="bsp-tab">Tab 1 content</div>
 				<div class="bsp-tab">Tab 2 content</div>
 				<div class="bsp-tab">Tab 3 content</div>
@@ -381,7 +271,7 @@
 
 			<p>Fill tab content from AJAX requests</p>
 
-			<div class="demo5" data-bsp-tabber>
+			<div class="demo demo5" data-bsp-tabber>
 				<div class="bsp-tab" data-nav-title="Tab 1"></div>
 				<div class="bsp-tab" data-nav-title="Tab 2"></div>
 				<div class="bsp-tab" data-nav-title="Tab 3"></div>
@@ -411,7 +301,7 @@
 
 			<p>Animate tab transition with CSS</p>
 
-			<div class="demo6" data-bsp-tabber>
+			<div class="demo demo6" data-bsp-tabber>
 				<div class="bsp-tab" data-nav-title="Tab 1">Tab 1 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 2">Tab 2 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 3">Tab 3 content</div>
@@ -427,7 +317,7 @@
 				<li>Add 'data-nav-name' attribute to named tabs</li>
 			</ul>
 
-			<div class="demo7" data-bsp-tabber>
+			<div class="demo demo7" data-bsp-tabber>
 				<div class="bsp-tab" data-nav-title="Tab 1" data-nav-name="tab1">Tab 1 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 2" data-nav-name="tab2">Tab 2 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 3" data-nav-name="tab3">Tab 3 content</div>

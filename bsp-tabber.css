@@ -1,0 +1,7 @@
+/* brightspot js tabber (bsp-tabber) */
+.bsp-tab {
+	display: none;
+}
+.bsp-tab.active {
+	display: block;
+}
