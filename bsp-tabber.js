@@ -70,7 +70,18 @@
         showTab: function(index) {
             var self = this;
             var $currentTab = this.$el.find('.' + this.options.tabClass + '[data-tab-index='+this.currentTab+']');
-            var $nextTab = this.$el.find('.' + this.options.tabClass + '[data-tab-index='+index+']');
+            var $nextTab;
+
+            /** assume name if a string is passed */
+            if (typeof index == 'string') {
+                $nextTab = this.$el.find('.' + this.options.tabClass + '[data-nav-name='+index+']');
+                index = $nextTab.data('tab-index');
+            } else if (typeof index == 'number') {
+                $nextTab = this.$el.find('.' + this.options.tabClass + '[data-tab-index='+index+']');
+            } else {
+                return;
+            }
+
             if (!this.options.showTabOverride) {
                 this.doShowTab(index);
             }
@@ -104,7 +115,8 @@
             var newTab = $('<div></div>', {
                 class: self.options.tabClass,
                 'data-nav-title': options.title,
-                'data-nav-class': options.navClass
+                'data-nav-class': options.navClass,
+                'data-nav-name': options.navName
             });
             newTab.append(options.content);
             if (options.insertAfter > 0) {

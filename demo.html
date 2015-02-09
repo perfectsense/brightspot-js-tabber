@@ -10,6 +10,7 @@
 		<style type="text/css">
 		body {
 			font-family: sans-serif;
+			padding-bottom: 50px;
 		}
 
 		/** demo 1 style */
@@ -150,7 +151,7 @@
 
 		/* demo 6 styles */
 		.demo6 {
-			margin: 10px 10px 100px 10px;
+			margin: 10px;
 			height: 50px;
 			position: relative;
 		}
@@ -177,6 +178,27 @@
 		    -ms-transition: opacity 1s ease-out;
 		    -moz-transition: opacity 1s ease-out;
 		    -webkit-transition: opacity 1s ease-out;
+		}
+
+		/* demo 7 styles */
+		.demo7 {
+			margin: 10px;
+		}
+		.demo7 .bsp-tabber-nav-container a {
+			border: 1px #000 solid;
+			display: inline-block;
+			padding: 5px;
+		}
+		.demo7 .bsp-tabber-nav-container a.active {
+			background: yellow;
+		}
+		.demo7 .bsp-tab {
+			border: 1px #000 solid;
+			display: none;
+			padding: 5px;
+		}
+		.demo7 .bsp-tab.active {
+			display: block;
 		}
 		</style>
 	</head>
@@ -394,6 +416,37 @@
 				<div class="bsp-tab" data-nav-title="Tab 2">Tab 2 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 3">Tab 3 content</div>
 			</div>
+		</section>
+
+		<section>
+			<h2>Demo 7</h2>
+
+			<p>Navigate to a tab by name</p>
+
+			<ul>
+				<li>Add 'data-nav-name' attribute to named tabs</li>
+			</ul>
+
+			<div class="demo7" data-bsp-tabber>
+				<div class="bsp-tab" data-nav-title="Tab 1" data-nav-name="tab1">Tab 1 content</div>
+				<div class="bsp-tab" data-nav-title="Tab 2" data-nav-name="tab2">Tab 2 content</div>
+				<div class="bsp-tab" data-nav-title="Tab 3" data-nav-name="tab3">Tab 3 content</div>
+			</div>
+
+			<form id="demo7form" action="">
+				<button data-show-tab="tab1">Go to 'tab1'</button>
+				<button data-show-tab="tab2">Go to 'tab2'</button>
+				<button data-show-tab="tab3">Go to 'tab3'</button>
+			</form>
+
+			<script>
+				$('#demo7form button').on('click', function(e) {
+					var tabName = $(this).data('show-tab');
+					var tabber = $('.demo7').data('tabber');
+					tabber.showTab(tabName);
+					e.preventDefault();
+				});
+			</script>
 		</section>
 
 	</body>
