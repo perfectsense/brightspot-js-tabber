@@ -104,21 +104,21 @@ this is called by other functions in the API.
 
 ## Events
 
--	init: fires after tabber is loaded, passes an object with
+    - init: fires after tabber is loaded, passes an object with
 		- tabber: reference to the tabber object
  
--	showTab: fires when a tab is shown, passes an object with
-		- $currentTab - current tab dom element
-		- $nextTab - the tab that is about to be shown
-		- index - index of current tab (base 1, not base 0)
-		- tabber - reference to the tabber object
+    - showTab: fires when a tab is shown, passes an object with
+        - $currentTab: current tab dom element
+        - $nextTab: the tab that is about to be shown
+        - index: index of current tab (base 1, not base 0)
+        - tabber: reference to the tabber object
+
+    - addTab: fires when a new tab is created, passes an object with
+        - $newTab: the new tab which was created
+        - tabber: reference to the tabber object
  
--	addTab - fires when a new tab is created, passes an object with
-		- $newTab - the new tab which was created
-		- tabber - reference to the tabber object
- 
--	removeTab - fires when a new tab is created, passes an object with
-		- tabber - reference to the tabber object
+    - removeTab: fires when a new tab is created, passes an object with
+        - tabber: reference to the tabber object
 
 Example:
 
