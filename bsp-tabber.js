@@ -1,34 +1,89 @@
 /**
  * Generic tabber
  *
- * Bare minimum example (you'd want to add other elements/classes for semantics/styling):
- * <div data-bsp-module-tabber>
- *   <a href="" class="bsp-tabber-nav active" data-show-tab="1">Tab 1</a>
- *   <a href="" class="bsp-tabber-nav" data-show-tab="2">Tab 2</a>
- *   <a href="" class="bsp-tabber-nav" data-show-tab="3">Tab 3</a>
- *   <div class="bsp-tab active">tab 1 content</div>
- *   <div class="bsp-tab">tab 2 content</div>
- *   <div class="bsp-tab">tab 3 content</div>
- * </div>
- *
- * If you choose not to set an active class on a nav button or tab in the html,
- * the JS will add the active class to the first item.
+ * See demo.html for examples
  *
  * Module options:
- * classActive - defaults to 'active'
- * navClass - defaults to 'bsp-tabber-nav'
- * tabClass - defaults to 'bsp-tab'
+ *  classActive - defaults to 'active', the class to assign active tabs and tab nav elements
+ *  loop - when using prevTab/nextTab in the API, should tabber loop
+ *  navClass - defaults to 'bsp-tabber-nav', assigned to automatically-generated nav links
+ *  navClassContainer - defaults to 'bsp-tabber-nav-container', assigned to automatically-generated wrapper of nav links
+ *  navPosition - defaults to 'top', 'bottom' is other valid option
+ *  showNav - defaults to true, nav will be disabled if set to false
+ *  showTabOverride - defaults to false, if you wanted 
+ *  tabClass - defaults to 'bsp-tab', the class tabber assigned to tabs
+ *
+ * Configuration through data attributes:
+ *  If the showTab config option is set to true and the tabber DOM structure looks like this:
+ *  <div data-bsp-tabber>
+ *    <div class="bsp-tab" data-nav-title="Tab 1" data-nav-name="t1" data-nav-class="tab1">Tab 1 content</div>
+ *    <div class="bsp-tab" data-nav-title="Tab 2" data-nav-name="t2" data-nav-class="tab2">Tab 2 content</div>
+ *  </div>
+ *
+ *  Tabber will create a nav element which looks like this and prepend or append it to its DOM element:
+ * 
+ *  <div class="bsp-tabber-nav-container">
+ *    <a href="" class="bsp-tabber-nav tab1 active">Tab 1</a>
+ *    <a href="" class="bsp-tabber-nav tab2">Tab 2</a>
+ *  </div>
  * 
  * Events:
- * showTab - fires when a tab is shown, passes an object with
- *   $currentTab - current tab dom element
- *   index - index of current tab (base 1, not base 0)
+ *  init - fires after tabber is loaded
+ *   tabber - reference to the tabber object
  *
- * Triggering a tab:
+ *  showTab - fires when a tab is shown, passes an object with
+ *   $currentTab - current tab dom element
+ *   $nextTab - the tab that is about to be shown
+ *   index - index of current tab (base 1, not base 0)
+ *   tabber - reference to the tabber object
+ *
+ *  addTab - fires when a new tab is created
+ *   $newTab - the new tab which was created
+ *   tabber - reference to the tabber object
+ *
+ *  removeTab - fires when a new tab is created
+ *   tabber - reference to the tabber object
+ *
+ * API:
  * The tabber object is exposed as a data attribute on the dom element, 
- * so you can externally trigger a tab to be shown like this:
- * var $tabber = $('.my-tabber').data('tabber');
- * $tabber.showTab(2);
+ * so you can externally trigger the following:
+ * 
+ * tabber.showTab(index)
+ * Goes to a tab by numeric index (assigned automatically) or tab name (assigned
+ * with data-nav-name attribute on DOM element)
+ *  var $tabber = $('.my-tabber').data('tabber');
+ *  $tabber.showTab(2);
+ *  $tabber.showTab('mytab');
+ *
+ * tabber.doShowTab(index)
+ * Used together with the showTabOverride = true option to delay or disable
+ * the display of a tab (see demo 4 in demo.html)
+ * 
+ * tabber.nextTab()
+ * Goes to the next tab. If you are on the last tab and looping is enabled, goes
+ * back to the beginning.
+ *
+ * tabber.prevTab()
+ * Goes to the previous tab. If you are on the first tab and looping is enabled, goes
+ * back to the end.
+ *
+ * tabber.getTab(index)
+ * Retrieves a jquery object containing the tab at the specified string or numeric index
+ * 
+ * tabber.addTab(options)
+ * options.title - sets the data-nav-title attribute on the new tab
+ * options.navClass - sets the data-nav-class attribute on the new tab
+ * options.navName - sets the data-nav-name attribute on the new tab
+ * options.content - can be text or a DOM element
+ * options.insertAfter - index of tab that new tab should be inserted after. if
+ *  unspecified, inserts tab at the end. if 0, inserts at beginning (prepend).
+ * 
+ * tabber.removeTab(index)
+ * Removes a tab at a specified index
+ * 
+ * tabber.render
+ * It's possible to manually trigger the render function, though usually
+ * this is called by other functions in the API.
  */
 (function(globals, factory) {
 
@@ -52,7 +107,7 @@
             var self = this;
             self.$el = $el;
             self.options = options;
-            $el.data('tabber', self);
+            self.$el.data('tabber', self);
             self.setDefaultTab();
             self.render();
             self.$el.trigger('init', {
@@ -67,21 +122,21 @@
                 }
             });
         },
-        showTab: function(index) {
-            var self = this;
-            var $currentTab = this.$el.find('.' + this.options.tabClass + '[data-tab-index='+this.currentTab+']');
-            var $nextTab;
-
-            /** assume name if a string is passed */
+        getTab: function(index) {
+            console.log(index);
             if (typeof index == 'string') {
-                $nextTab = this.$el.find('.' + this.options.tabClass + '[data-nav-name='+index+']');
-                index = $nextTab.data('tab-index');
+                return this.$el.find('.' + this.options.tabClass + '[data-nav-name='+index+']');
             } else if (typeof index == 'number') {
-                $nextTab = this.$el.find('.' + this.options.tabClass + '[data-tab-index='+index+']');
+                return this.$el.find('.' + this.options.tabClass + '[data-tab-index='+index+']');
             } else {
                 return;
             }
-
+        },
+        showTab: function(index) {
+            var self = this;
+            var $currentTab = this.getTab(this.currentTab);
+            var $nextTab = this.getTab(index);
+            index = $nextTab.data('tab-index');
             if (!this.options.showTabOverride) {
                 this.doShowTab(index);
             }
@@ -140,8 +195,8 @@
                 $newTab: newTab
             });
         },
-        removeTab: function(i) {
-            var $tab = this.$el.find('[data-tab-index='+i+']');
+        removeTab: function(index) {
+            var $tab = this.getTab(index);
             if ($tab.hasClass(this.options.classActive)) {
                 this.currentTab = 1;
             } else if (i < this.currentTab) {
