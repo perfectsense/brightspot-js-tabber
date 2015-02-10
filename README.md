@@ -19,7 +19,7 @@ Manually:
 -	**navClassContainer:** defaults to 'bsp-tabber-nav-container', assigned to automatically-generated wrapper of nav links
 -	**navPosition:** defaults to 'top', 'bottom' is other valid option
 -	**showNav:** defaults to true, nav will be disabled if set to false
--	**showTabOverride:** defaults to false, if you wanted 
+-	**showTabOverride:** defaults to false, if you want to delay or disable showing tabs
 -	**tabClass:** defaults to 'bsp-tab', the class tabber assigned to tabs
 
 Configuration is passed like this:
