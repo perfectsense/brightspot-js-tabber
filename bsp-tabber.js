@@ -123,7 +123,6 @@
             });
         },
         getTab: function(index) {
-            console.log(index);
             if (typeof index == 'string') {
                 return this.$el.find('.' + this.options.tabClass + '[data-nav-name='+index+']');
             } else if (typeof index == 'number') {
