@@ -93,13 +93,13 @@
         define(['jquery','bsp-utils'], factory);
 
     } else {
-        factory(globals.jQuery, globals.bsp_utils, globals);
+        globals.bsp_tabber = factory(globals.jQuery, globals.bsp_utils);
     }
 
 })(this, function($, bsp_utils, globals) {
     "use strict";
 
-    var module = {
+    return {
         currentTab: 1,
         showNav: true,
         tabCount: 0,
@@ -265,23 +265,4 @@
         }
     };
     
-    var thePlugin = {
-        '_defaultOptions': {
-            'classActive':        'active',
-            'loop':               false,
-            'navClass':           'bsp-tabber-nav',
-            'navContainerClass':  'bsp-tabber-nav-container',
-            'navPosition':        'top',
-            'showNav':            true,
-            'showTabOverride':    false,
-            'tabClass':           'bsp-tab'
-        },
-        '_each': function(item) {
-            var options = this.option(item);
-            var moduleInstance = Object.create(module);
-            moduleInstance.init($(item), options);
-        }
-    };
-
-    return bsp_utils.plugin(false, 'bsp', 'tabber', thePlugin);
 });
