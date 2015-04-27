@@ -110,7 +110,7 @@
             self.$el.data('tabber', self);
             self.setDefaultTab();
             self.render();
-            self.$el.trigger('init', {
+            self.$el.trigger('tabber:init', {
                 tabber: self
             });
         },
@@ -139,7 +139,7 @@
             if (!this.options.showTabOverride) {
                 this.doShowTab(index);
             }
-            this.$el.trigger('showTab', {
+            this.$el.trigger('tabber:showTab', {
                 $currentTab: $currentTab,
                 $nextTab: $nextTab,
                 index: index,
@@ -189,7 +189,7 @@
                 self.$el.append(newTab);
             }
             self.render();
-            this.$el.trigger('addTab', {
+            this.$el.trigger('tabber:addTab', {
                 tabber: self,
                 $newTab: newTab
             });
@@ -203,7 +203,7 @@
             }
             $tab.remove();
             this.render();
-            this.$el.trigger('removeTab', {
+            this.$el.trigger('tabber:removeTab', {
                 tabber: self
             });
         },

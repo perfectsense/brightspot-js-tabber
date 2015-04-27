@@ -255,7 +255,7 @@
 			</form>
 
 			<script>
-				$('.demo4').on('showTab', function(e, data) {
+				$('.demo4').on('tabber:showTab', function(e, data) {
 					$('.demo4').find('.error').remove();
 					var allowNav = $('#demo4form [name=allownav]:checked').val();
 					if (allowNav == "yes") {
@@ -280,7 +280,7 @@
 
 			<script>
 				$(function() {
-					$('.demo5').on('showTab', function(e, data) {
+					$('.demo5').on('tabber:showTab', function(e, data) {
 						/** immediatly display loading message */
 						data.$nextTab.html('Loading...');
 
@@ -290,7 +290,7 @@
 						}, 1000);
 					});
 
-					$('.demo5').on('init', function(e, data) {
+					$('.demo5').on('tabber:init', function(e, data) {
 						data.tabber.showTab(1);
 					});
 				});
