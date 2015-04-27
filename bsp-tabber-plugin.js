@@ -13,16 +13,6 @@
     "use strict";
 
     var thePlugin = {
-        '_defaultOptions': {
-            'classActive':        'active',
-            'loop':               false,
-            'navClass':           'bsp-tabber-nav',
-            'navContainerClass':  'bsp-tabber-nav-container',
-            'navPosition':        'top',
-            'showNav':            true,
-            'showTabOverride':    false,
-            'tabClass':           'bsp-tab'
-        },
         '_each': function(item) {
             var options = this.option(item);
             var moduleInstance = Object.create(bsp_tabber);

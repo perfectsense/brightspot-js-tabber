@@ -100,13 +100,23 @@
     "use strict";
 
     return {
+        defaults : {
+            'classActive':        'active',
+            'loop':               false,
+            'navClass':           'bsp-tabber-nav',
+            'navContainerClass':  'bsp-tabber-nav-container',
+            'navPosition':        'top',
+            'showNav':            true,
+            'showTabOverride':    false,
+            'tabClass':           'bsp-tab'
+        },
         currentTab: 1,
         showNav: true,
         tabCount: 0,
         init: function($el, options) {
             var self = this;
             self.$el = $el;
-            self.options = options;
+            self.options = $.extend(true, {}, self.defaults, options);
             self.$el.data('tabber', self);
             self.setDefaultTab();
             self.render();
