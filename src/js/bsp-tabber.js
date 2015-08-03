@@ -85,130 +85,120 @@
  * It's possible to manually trigger the render function, though usually
  * this is called by other functions in the API.
  */
-(function(globals, factory) {
+import $ from 'jquery';
+import bsp_utils from 'bsp-utils';
 
-    "use strict";
-
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery','bsp-utils'], factory);
-
-    } else {
-        globals.bsp_tabber = factory(globals.jQuery, globals.bsp_utils);
-    }
-
-})(this, function($, bsp_utils, globals) {
-    "use strict";
-
-    return {
-        defaults : {
-            'classActive':        'active',
-            'loop':               false,
-            'navClass':           'bsp-tabber-nav',
-            'navContainerClass':  'bsp-tabber-nav-container',
-            'navPosition':        'top',
-            'showNav':            true,
-            'showTabOverride':    false,
-            'tabClass':           'bsp-tab'
-        },
-        currentTab: 1,
-        showNav: true,
-        tabCount: 0,
-        init: function($el, options) {
-            var self = this;
-            self.$el = $el;
-            self.options = $.extend(true, {}, self.defaults, options);
-            self.$el.data('tabber', self);
-            self.setDefaultTab();
-            self.render();
-            self.$el.trigger('tabber:init', {
-                tabber: self
-            });
-        },
-        setDefaultTab: function() {
-            var self = this;
-            this.$el.find('.' + this.options.tabClass).each(function(key, tab) {
-                if ($(tab).hasClass(self.options.classActive)) {
-                    self.currentTab = key+1;
+export default {
+    defaults : {
+        'classActive':        'active',
+        'loop':               false,
+        'navClass':           'bsp-tabber-nav',
+        'navContainerClass':  'bsp-tabber-nav-container',
+        'navPosition':        'top',
+        'showNav':            true,
+        'showTabOverride':    false,
+        'tabClass':           'bsp-tab'
+    },
+    currentTab: 1,
+    showNav: true,
+    tabCount: 0,
+    init: function($el, options) {
+        var self = this;
+        self.$el = $el;
+        self.options = $.extend(true, {}, self.defaults, options);
+        self.$el.data('tabber', self);
+        self.setDefaultTab();
+        self.render();
+        self.$el.trigger('tabber:init', {
+            tabber: self
+        });
+    },
+    setDefaultTab: function() {
+        var self = this;
+        this.$el.find('.' + this.options.tabClass).each(function(key, tab) {
+            if ($(tab).hasClass(self.options.classActive)) {
+                self.currentTab = key+1;
+            }
+        });
+    },
+    getTab: function(index) {
+        if (typeof index == 'string' && index.length > 0) {
+            return this.$el.find('.' + this.options.tabClass + '[data-nav-name='+index+']');
+        } else if (typeof index == 'number') {
+            return this.$el.find('.' + this.options.tabClass + '[data-tab-index='+index+']');
+        } else {
+            return;
+        }
+    },
+    showTab: function(index) {
+        var self = this;
+        var $currentTab = this.getTab(this.currentTab);
+        var $nextTab = this.getTab(index);
+        index = $nextTab.data('tab-index');
+        if (!this.options.showTabOverride) {
+            this.doShowTab(index);
+        }
+        this.$el.trigger('tabber:showTab', {
+            $currentTab: $currentTab,
+            $nextTab: $nextTab,
+            index: index,
+            tabber: self
+        });
+    },
+    doShowTab: function(index) {
+        this.currentTab = index;
+        this.render();
+    },
+    nextTab: function() {
+        if (this.currentTab < this.tabCount) {
+            this.showTab(this.currentTab+1);
+        } else if (this.currentTab == this.tabCount && this.options.loop) {
+            this.showTab(1);
+        }
+    },
+    prevTab: function() {
+        if (this.currentTab > 1) {
+            this.showTab(this.currentTab-1);
+        } else if (this.currentTab == 1 && this.options.loop) {
+            this.showTab(this.tabCount);
+        }
+    },
+    addTab: function(options) {
+        var self = this;
+        var newTab = $('<div></div>', {
+            class: self.options.tabClass,
+            'data-nav-title': options.title,
+            'data-nav-class': options.navClass,
+            'data-nav-name': options.navName
+        });
+        newTab.append(options.content);
+        if (options.insertAfter > 0) {
+            self.$el.find('.' + self.options.tabClass).each(function(key, tab) {
+                if ((key+1) == options.insertAfter) {
+                    $(tab).after(newTab);
                 }
             });
-        },
-        getTab: function(index) {
-            if (typeof index == 'string') {
-                return this.$el.find('.' + this.options.tabClass + '[data-nav-name='+index+']');
-            } else if (typeof index == 'number') {
-                return this.$el.find('.' + this.options.tabClass + '[data-tab-index='+index+']');
-            } else {
-                return;
-            }
-        },
-        showTab: function(index) {
-            var self = this;
-            var $currentTab = this.getTab(this.currentTab);
-            var $nextTab = this.getTab(index);
-            index = $nextTab.data('tab-index');
-            if (!this.options.showTabOverride) {
-                this.doShowTab(index);
-            }
-            this.$el.trigger('tabber:showTab', {
-                $currentTab: $currentTab,
-                $nextTab: $nextTab,
-                index: index,
-                tabber: self
-            });
-        },
-        doShowTab: function(index) {
-            this.currentTab = index;
-            this.render();
-        },
-        nextTab: function() {
-            if (this.currentTab < this.tabCount) {
-                this.showTab(this.currentTab+1);
-            } else if (this.currentTab == this.tabCount && this.options.loop) {
-                this.showTab(1);
-            }
-        },
-        prevTab: function() {
-            if (this.currentTab > 1) {
-                this.showTab(this.currentTab-1);
-            } else if (this.currentTab == 1 && this.options.loop) {
-                this.showTab(this.tabCount);
-            }
-        },
-        addTab: function(options) {
-            var self = this;
-            var newTab = $('<div></div>', {
-                class: self.options.tabClass,
-                'data-nav-title': options.title,
-                'data-nav-class': options.navClass,
-                'data-nav-name': options.navName
-            });
-            newTab.append(options.content);
-            if (options.insertAfter > 0) {
-                self.$el.find('.' + self.options.tabClass).each(function(key, tab) {
-                    if ((key+1) == options.insertAfter) {
-                        $(tab).after(newTab);
-                    }
-                });
-                if (options.insertAfter <= self.currentTab) {
-                    self.currentTab++;
-                }
-            } else if (options.insertAfter === 0) {
-                self.$el.prepend(newTab);
+            if (options.insertAfter <= self.currentTab) {
                 self.currentTab++;
-            } else {
-                self.$el.append(newTab);
             }
-            self.render();
-            this.$el.trigger('tabber:addTab', {
-                tabber: self,
-                $newTab: newTab
-            });
-        },
-        removeTab: function(index) {
-            var $tab = this.getTab(index);
+        } else if (options.insertAfter === 0) {
+            self.$el.prepend(newTab);
+            self.currentTab++;
+        } else {
+            self.$el.append(newTab);
+        }
+        self.render();
+        this.$el.trigger('tabber:addTab', {
+            tabber: self,
+            $newTab: newTab
+        });
+    },
+    removeTab: function(index) {
+        var $tab = this.getTab(index);
+        if ($tab) {
             if ($tab.hasClass(this.options.classActive)) {
                 this.currentTab = 1;
-            } else if (i < this.currentTab) {
+            } else if (index < this.currentTab) {
                 this.currentTab--;
             }
             $tab.remove();
@@ -216,63 +206,62 @@
             this.$el.trigger('tabber:removeTab', {
                 tabber: self
             });
-        },
-        indexTabs: function() {
-            var self = this;
-            self.tabCount = 0;
-            this.$el.find('.' + this.options.tabClass).each(function(key, el) {
-                $(el).attr('data-tab-index', key+1);
-                self.tabCount++;
-            });
-        },
-        render: function() {
-            this.indexTabs();
-            this.renderNav();
-            this.renderTabs();
-        },
-        renderNav: function() {
-            if (this.options.showNav) {
-                var self = this;
-                var selector = '.' + self.options.navContainerClass;
-                var navHtml = '<div class="'+self.options.navContainerClass+'">';
-            
-                self.$el.find(selector).remove();
-
-                self.$el.find('.' + self.options.tabClass).each(function(key, val) {
-                    var linkText = key+1;
-                    var navExtraClass = $(val).data('nav-class');
-                    if ($(val).data('nav-title')) {
-                        linkText = $(val).data('nav-title');
-                    }
-                    navHtml += '<a class="'+self.options.navClass;
-                    if (navExtraClass) {
-                        navHtml += ' ' + navExtraClass;
-                    }
-                    navHtml += '" href="" data-show-tab="'+(key+1)+'">'+linkText+'</a>';
-                });
-
-                navHtml += '</div>';
-
-                if (self.options.navPosition == 'bottom') {
-                    self.$el.append(navHtml);
-                } else {
-                    self.$el.prepend(navHtml);
-                }
-
-                this.$el.find('.' + this.options.navClass).removeClass( this.options.classActive );
-                this.$el.find('[data-show-tab='+this.currentTab+']').addClass( this.options.classActive );
-
-                self.$el.find('.' + self.options.navClass).on('click', function(e) {
-                    var index = $(this).data('show-tab');
-                    self.showTab(index);
-                    e.preventDefault();
-                });
-            }
-        },
-        renderTabs: function() {
-            this.$el.find('.' + this.options.tabClass).removeClass( this.options.classActive );
-            this.$el.find('[data-tab-index='+this.currentTab+']').addClass( this.options.classActive );
         }
-    };
-    
-});
+    },
+    indexTabs: function() {
+        var self = this;
+        self.tabCount = 0;
+        this.$el.find('.' + this.options.tabClass).each(function(key, el) {
+            $(el).attr('data-tab-index', key+1);
+            self.tabCount++;
+        });
+    },
+    render: function() {
+        this.indexTabs();
+        this.renderNav();
+        this.renderTabs();
+    },
+    renderNav: function() {
+        if (this.options.showNav) {
+            var self = this;
+            var selector = '.' + self.options.navContainerClass;
+            var navHtml = '<div class="'+self.options.navContainerClass+'">';
+        
+            self.$el.find(selector).remove();
+
+            self.$el.find('.' + self.options.tabClass).each(function(key, val) {
+                var linkText = key+1;
+                var navExtraClass = $(val).data('nav-class');
+                if ($(val).data('nav-title')) {
+                    linkText = $(val).data('nav-title');
+                }
+                navHtml += '<a class="'+self.options.navClass;
+                if (navExtraClass) {
+                    navHtml += ' ' + navExtraClass;
+                }
+                navHtml += '" href="" data-show-tab="'+(key+1)+'">'+linkText+'</a>';
+            });
+
+            navHtml += '</div>';
+
+            if (self.options.navPosition == 'bottom') {
+                self.$el.append(navHtml);
+            } else {
+                self.$el.prepend(navHtml);
+            }
+
+            this.$el.find('.' + this.options.navClass).removeClass( this.options.classActive );
+            this.$el.find('[data-show-tab='+this.currentTab+']').addClass( this.options.classActive );
+
+            self.$el.find('.' + self.options.navClass).on('click', function(e) {
+                var index = $(this).data('show-tab');
+                self.showTab(index);
+                e.preventDefault();
+            });
+        }
+    },
+    renderTabs: function() {
+        this.$el.find('.' + this.options.tabClass).removeClass( this.options.classActive );
+        this.$el.find('[data-tab-index='+this.currentTab+']').addClass( this.options.classActive );
+    }
+};
