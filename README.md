@@ -1,5 +1,6 @@
-# Installation
+NOTE: Starting with 2.0.0, bsp-tabber is an [ECMAScript 6 module](http://www.2ality.com/2014/09/es6-modules-final.html) instead of a [RequireJS module](http://requirejs.org/). If you need an AMD version, work in the 1.x.x branch.
 
+# Installation
 
 Manually:
 
