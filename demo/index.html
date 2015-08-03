@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="/assets/bower/systemjs/dist/system.js"></script>
+		<script src="/config.js"></script>
+		<script>
+			System.import('/assets/js/bsp-tabber-plugin');
+		</script>
 		
-		<script src="bower_components/jquery/dist/jquery.js"></script>
-		<script src="bower_components/bsp-utils/bsp-utils.js"></script>
-		<script src="bsp-tabber.js"></script>
-		<script src="bsp-tabber-plugin.js"></script>
-		<script>if (!window.$) { alert("jquery not found, did you run 'bower install'?"); }</script>
-		<link rel="stylesheet" type="text/css" href="bsp-tabber.css" />
+		<link rel="stylesheet" type="text/css" href="/assets/css/bsp-tabber.css" />
 
 		<style type="text/css">
 		body {
@@ -147,6 +147,7 @@
 			</form>
 
 			<script>
+			System.import('jquery').then(function($) {
 				function demo1select(name, showZero) {
 					var html = '<select name="'+name+'"><option></option>';
 					if (showZero) {
@@ -180,10 +181,11 @@
 				$('#demo1form2').submit(function(e) {
 					var tabber = $('.demo1').data('tabber');
 					var $form = $(this);
-					tabber.removeTab( $form.find('[name=tabToRemove]').val() );
+					tabber.removeTab( $form.find('[name=tabToRemove]').val()*1 );
 					demo1replaceDropdowns();
 					e.preventDefault();
 				});
+			});
 			</script>
 		</section>
 
@@ -226,6 +228,7 @@
 			</div>
 
 			<script>
+			System.import('jquery').then(function($) {
 				$('.demo3nav .next').on('click', function() {
 					var tabber = $('.demo3').data('tabber');
 					tabber.nextTab();
@@ -234,6 +237,7 @@
 					var tabber = $('.demo3').data('tabber');
 					tabber.prevTab();
 				});
+			});
 			</script>
 		</section>
 
@@ -255,14 +259,16 @@
 			</form>
 
 			<script>
-				$('.demo4').on('tabber:showTab', function(e, data) {
-					$('.demo4').find('.error').remove();
-					var allowNav = $('#demo4form [name=allownav]:checked').val();
-					if (allowNav == "yes") {
-						data.tabber.doShowTab(data.index);
-					} else {
-						data.$currentTab.prepend('<div class="error">tab nav disabled</div>');
-					}
+				System.import('jquery').then(function($) {
+					$('.demo4').on('tabber:showTab', function(e, data) {
+						$('.demo4').find('.error').remove();
+						var allowNav = $('#demo4form [name=allownav]:checked').val();
+						if (allowNav == "yes") {
+							data.tabber.doShowTab(data.index);
+						} else {
+							data.$currentTab.prepend('<div class="error">tab nav disabled</div>');
+						}
+					});
 				});
 			</script>
 		</section>
@@ -279,21 +285,21 @@
 			</div>
 
 			<script>
-				$(function() {
-					$('.demo5').on('tabber:showTab', function(e, data) {
-						/** immediatly display loading message */
-						data.$nextTab.html('Loading...');
+			System.import('jquery').then(function($) {
+				$('.demo5').on('tabber:showTab', function(e, data) {
+					// immediatly display loading message 
+					data.$nextTab.html('Loading...');
 
-						/** mocking async ajax request with a timeout */
-						setTimeout(function() {
-							data.$nextTab.html('Content from ajax request loaded');
-						}, 1000);
-					});
-
-					$('.demo5').on('tabber:init', function(e, data) {
-						data.tabber.showTab(1);
-					});
+					// mocking async ajax request with a timeout
+					setTimeout(function() {
+						data.$nextTab.html('Content from ajax request loaded');
+					}, 1000);
 				});
+
+				$('.demo5').on('tabber:init', function(e, data) {
+					data.tabber.showTab(1);
+				});
+			});
 			</script>
 		</section>
 
@@ -331,12 +337,14 @@
 			</form>
 
 			<script>
+			System.import('jquery').then(function($) {
 				$('#demo7form button').on('click', function(e) {
 					var tabName = $(this).data('show-tab');
 					var tabber = $('.demo7').data('tabber');
 					tabber.showTab(tabName);
 					e.preventDefault();
 				});
+			});
 			</script>
 		</section>
 
