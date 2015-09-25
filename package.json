@@ -1,6 +1,6 @@
 {
   "name": "bsp-tabber",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "devDependencies": {
     "babel-core": "^5.8.20",
     "express": "^4.13.3"

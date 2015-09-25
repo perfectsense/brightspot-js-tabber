@@ -18,5 +18,5 @@
   "license": "MIT",
   "main": ["src/js/bsp-tabber.js","src/js/bsp-tabber-plugin.js"],
   "name": "bsp-tabber",
-  "version": "2.0.1"
+  "version": "2.0.2"
 }
