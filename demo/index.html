@@ -91,6 +91,11 @@
 		    -moz-transition: opacity 1s ease-out;
 		    -webkit-transition: opacity 1s ease-out;
 		}
+
+		/** demo 8 styles */
+		.demo8 li {
+			cursor: pointer;
+		}
 		</style>
 	</head>
 	<body>
@@ -346,6 +351,23 @@
 				});
 			});
 			</script>
+		</section>
+
+		<section>
+			<h2>Demo 8</h2>
+
+			<p>Replace tab nav wrapper and nav item templates</p>
+
+			<div class="demo demo8" data-bsp-tabber data-bsp-tabber-options='
+				{
+					"navItemTemplate" : "<li {{data}} class=\"{{class}}\">¯\\_(ツ)_/¯ {{content}}</li>",
+					"navContainerTemplate" : "<ul class=\"{{class}}\">{{content}}</ul>"
+				}
+			'>
+				<div class="bsp-tab" data-nav-title="Tab 1" data-nav-name="tab1">Tab 1 content</div>
+				<div class="bsp-tab" data-nav-title="Tab 2" data-nav-name="tab2">Tab 2 content</div>
+				<div class="bsp-tab" data-nav-title="Tab 3" data-nav-name="tab3">Tab 3 content</div>
+			</div>
 		</section>
 
 	</body>

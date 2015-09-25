@@ -90,14 +90,16 @@ import bsp_utils from 'bsp-utils';
 
 export default {
     defaults : {
-        'classActive':        'active',
-        'loop':               false,
-        'navClass':           'bsp-tabber-nav',
-        'navContainerClass':  'bsp-tabber-nav-container',
-        'navPosition':        'top',
-        'showNav':            true,
-        'showTabOverride':    false,
-        'tabClass':           'bsp-tab'
+        'classActive':              'active',
+        'loop':                     false,
+        'navClass':                 'bsp-tabber-nav',
+        'navContainerClass':        'bsp-tabber-nav-container',
+        'navPosition':              'top',
+        'navItemTemplate':          '<a href="" {{data}} class="{{class}}">{{content}}</a>',
+        'navContainerTemplate':     '<div class="{{class}}">{{content}}</div>',
+        'showNav':                  true,
+        'showTabOverride':          false,
+        'tabClass':                 'bsp-tab'
     },
     currentTab: 1,
     showNav: true,
@@ -225,24 +227,32 @@ export default {
         if (this.options.showNav) {
             var self = this;
             var selector = '.' + self.options.navContainerClass;
-            var navHtml = '<div class="'+self.options.navContainerClass+'">';
+            var navHtml = self.options.navContainerTemplate;
+            var tabsHtml = '';
         
             self.$el.find(selector).remove();
 
             self.$el.find('.' + self.options.tabClass).each(function(key, val) {
+                var data = 'data-show-tab="'+(key+1)+'"';
                 var linkText = key+1;
+                var className = self.options.navClass;
                 var navExtraClass = $(val).data('nav-class');
+                var tabHtml = self.options.navItemTemplate;
+                if (navExtraClass) {
+                    className += ' ' + navExtraClass;
+                }
                 if ($(val).data('nav-title')) {
                     linkText = $(val).data('nav-title');
                 }
-                navHtml += '<a class="'+self.options.navClass;
-                if (navExtraClass) {
-                    navHtml += ' ' + navExtraClass;
-                }
-                navHtml += '" href="" data-show-tab="'+(key+1)+'">'+linkText+'</a>';
+                tabsHtml +=  tabHtml
+                                .replace('{{class}}', className)
+                                .replace('{{data}}', data)
+                                .replace('{{content}}', linkText);
             });
 
-            navHtml += '</div>';
+            navHtml = navHtml
+                .replace('{{class}}', self.options.navContainerClass)
+                .replace('{{content}}', tabsHtml);
 
             if (self.options.navPosition == 'bottom') {
                 self.$el.append(navHtml);
