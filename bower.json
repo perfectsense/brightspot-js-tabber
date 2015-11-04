@@ -16,7 +16,10 @@
     "jquery"
   ],
   "license": "MIT",
-  "main": ["src/js/bsp-tabber.js","src/js/bsp-tabber-plugin.js"],
+  "main": [
+    "src/js/*.js",
+    "src/css/*.css"
+  ],
   "name": "bsp-tabber",
-  "version": "2.0.2"
+  "version": "2.0.3"
 }
