@@ -99,7 +99,8 @@ export default {
         'navContainerTemplate':     '<div class="{{class}}">{{content}}</div>',
         'showNav':                  true,
         'showTabOverride':          false,
-        'tabClass':                 'bsp-tab'
+        'tabClass':                 'bsp-tab',
+        'scrollTop':                false
     },
     currentTab: 1,
     showNav: true,
@@ -150,6 +151,9 @@ export default {
     doShowTab: function(index) {
         this.currentTab = index;
         this.render();
+        if (this.options.scrollTop) {
+            window.scrollTo(0,0);
+        }
     },
     nextTab: function() {
         if (this.currentTab < this.tabCount) {
