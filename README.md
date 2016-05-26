@@ -22,6 +22,7 @@ Manually:
 -	**showNav:** defaults to true, nav will be disabled if set to false
 -	**showTabOverride:** defaults to false, if you want to delay or disable showing tabs
 -	**tabClass:** defaults to 'bsp-tab', the class tabber assigned to tabs
+-	**scrollTop:** defaults to false, if true the page will scroll to the top when tabs are switched
 
 Configuration is passed like this:
 
