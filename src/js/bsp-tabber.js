@@ -265,7 +265,7 @@ export default {
             }
 
             this.$el.find('.' + this.options.navClass).removeClass( this.options.classActive );
-            this.$el.find('[data-show-tab='+this.currentTab+']').addClass( this.options.classActive );
+            this.$el.find('.' + this.options.navClass + '[data-show-tab='+this.currentTab+']').addClass( this.options.classActive );
 
             self.$el.find('.' + self.options.navClass).on('click', function(e) {
                 var index = $(this).data('show-tab');
@@ -276,6 +276,6 @@ export default {
     },
     renderTabs: function() {
         this.$el.find('.' + this.options.tabClass).removeClass( this.options.classActive );
-        this.$el.find('[data-tab-index='+this.currentTab+']').addClass( this.options.classActive );
+        this.$el.find('.' + this.options.tabClass + '[data-tab-index='+this.currentTab+']').addClass( this.options.classActive );
     }
 };
