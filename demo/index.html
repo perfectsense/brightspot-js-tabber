@@ -6,7 +6,7 @@
 		<script>
 			System.import('/assets/js/bsp-tabber-plugin');
 		</script>
-		
+
 		<link rel="stylesheet" type="text/css" href="/assets/css/bsp-tabber.css" />
 
 		<style type="text/css">
@@ -41,7 +41,7 @@
 		#demo1form1 h4, #demo1form2 h4 {
 			margin: 10px 0;
 		}
-		
+
 		/** demo 2 styles */
 		.demo2tab1 {
 			color: green;
@@ -49,7 +49,7 @@
 		}
 		.demo2tab2 {
 			color: brown;
-			font-weight: bold;	
+			font-weight: bold;
 		}
 		.demo2tab3 {
 			color: orange;
@@ -211,7 +211,7 @@
 				<div class="bsp-tab" data-nav-title="Tab 3" data-nav-class="demo2tab3">Tab 3 content</div>
 			</div>
 		</section>
-		
+
 		<section>
 			<h2>Demo 3</h2>
 
@@ -292,7 +292,7 @@
 			<script>
 			System.import('jquery').then(function($) {
 				$('.demo5').on('tabber:showTab', function(e, data) {
-					// immediatly display loading message 
+					// immediatly display loading message
 					data.$nextTab.html('Loading...');
 
 					// mocking async ajax request with a timeout
@@ -367,6 +367,36 @@
 				<div class="bsp-tab" data-nav-title="Tab 1" data-nav-name="tab1">Tab 1 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 2" data-nav-name="tab2">Tab 2 content</div>
 				<div class="bsp-tab" data-nav-title="Tab 3" data-nav-name="tab3">Tab 3 content</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>Demo 9</h2>
+
+			<p>Tabbers inside a tabber</p>
+
+			<div class="demo demo9" data-bsp-tabber>
+				<div class="bsp-tab">
+					<div class="demo" data-bsp-tabber>
+						<div class="bsp-tab">Tab 1 content</div>
+						<div class="bsp-tab">Tab 2 content</div>
+						<div class="bsp-tab">Tab 3 content</div>
+					</div>
+				</div>
+				<div class="bsp-tab">
+					<div class="demo" data-bsp-tabber>
+						<div class="bsp-tab">Tab 1 content</div>
+						<div class="bsp-tab">Tab 2 content</div>
+						<div class="bsp-tab">Tab 3 content</div>
+					</div>
+				</div>
+				<div class="bsp-tab">
+					<div class="demo" data-bsp-tabber>
+						<div class="bsp-tab">Tab 1 content</div>
+						<div class="bsp-tab">Tab 2 content</div>
+						<div class="bsp-tab">Tab 3 content</div>
+					</div>
+				</div>
 			</div>
 		</section>
 
